@@ -6,25 +6,32 @@
 class TestObject
 {
 public:
-	void testCallback(const std::string& args)
+	void testCallbackA(const std::string& args)
 	{
-		std::cout << "Test obj msg with arg: " << args << std::endl;
+		std::cout << "Test obj msg with str arg: " << args << "\n";
+	}
+
+	void testCallbackB(int arg1, int arg2)
+	{
+		std::cout << "Test obj msg with numeric arg: " << arg1 << " " << arg2 << "\n";
 	}
 };
 
-int main()
+int main(int argc, char** argv)
 {
 	Caller caller;
 	TestObject obj;
 
-	std::cout << "Start" << std::endl;
-	//obj.testCallback("test A");
+	std::cout << "Start" << "\n";
 
-	caller.registerCallback(&TestObject::testCallback, obj, "test A");
+	caller.registerCallback(&TestObject::testCallbackA, obj, "StrArg");
+	caller.execute();
 
-	caller.callCallback();
+	caller.registerCallback(&TestObject::testCallbackB, obj, 31, 42);
+	caller.execute();
 
-	std::cout << "End" << std::endl;
+	caller.unregisterCallback();
+	caller.execute();
 
-	return 0;
+	std::cout << "End" << "\n\n\n";
 }
